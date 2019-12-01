@@ -44,16 +44,16 @@ public class GraduateBoyTest {
         ParkingTicket ticketB = graduateBoy.park(testCarB);
         ParkingTicket ticketC = graduateBoy.park(testCarC);
         assertEquals(parkingLotB.getName(),ParkingLot.getName(ticketC));
-        assertEquals(parkingLotA.getName(),ticketB.getMessages().get(0));
-        assertEquals(parkingLotA.getName(),ticketA.getMessages().get(0));
+        assertEquals(parkingLotA.getName(),ParkingLot.getName(ticketB));
+        assertEquals(parkingLotA.getName(),ParkingLot.getName(ticketA));
     }
 
     @Test
-    public void should_get_ticket_info() throws ParkingException {
+    public void should_get_ticket_info() throws ParkingException, TicketException {
         ParkingTicket ticket = graduateBoy.park(testCarB);
         assertNotNull(ticket.getMessages());
-        assertEquals(parkingLotA.getName(),ticket.getMessages().get(0));
-        assertEquals(graduateBoy.getName(),ticket.getMessages().get(1));
+        assertEquals(parkingLotA.getName(),ParkingLot.getName(ticket));
+        assertEquals(graduateBoy.getName(),GraduateBoy.getName(ticket));
     }
 
     @Test
