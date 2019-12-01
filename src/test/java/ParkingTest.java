@@ -12,7 +12,7 @@ public class ParkingTest {
     private TestCar testCarB;
     @Before
     public void init(){
-        parkingLot = new ParkingLot(10,10);
+        parkingLot = new ParkingLot("park",10,10);
         testCarA = new TestCar("粤A12133");
         testCarB = new TestCar("粤B12232");
     }

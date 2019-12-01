@@ -1,33 +1,50 @@
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class ParkingTicket {
     private static String prefix="TICKET";
     private String ticketString;
+    private ArrayList<String> messages = new ArrayList<>();
     private Car car;
 
-    public static void validate(String ticketString) throws TicketException {
+    public static ParkingTicket validate(String ticketString) throws TicketException {
         if(!ticketString.startsWith(ParkingTicket.prefix)){
             throw new TicketException("验证失败");
         }
         String[] split = ticketString.split("@");
-        if(split.length!=3){
+        if(split.length<3){
             throw new TicketException("验证失败");
         }
         String md5 = crypt(split[1]);
         if(!md5.equals(split[2])){
             throw new TicketException("验证失败");
         }
+        ParkingTicket parkingTicket = new ParkingTicket();
+        parkingTicket.ticketString = ticketString;
+        parkingTicket.messages = new ArrayList<>();
+        if(split.length>3){
+            for (int i = 3;i<split.length;i++){
+                parkingTicket.messages.add(split[i]);
+            }
+        }
+        return parkingTicket;
+    }
+    public static void destory(ParkingTicket parkingTicket) {
     }
 
-    public static void destory(ParkingTicket parkingTicket) {
+    public void addMessage(String message){
+        messages.add(message);
     }
 
     public void gen(Car car, long time) {
         String value = car.getCarId()+time;
         String md5 = crypt(value);
         ticketString =prefix+"@"+ value+"@"+md5;
+        for(String messages : messages){
+            ticketString=ticketString+"@"+messages;
+        }
         this.car = car;
     }
 
@@ -61,5 +78,9 @@ public class ParkingTicket {
 
     public Car getCar() {
         return car;
+    }
+
+    public ArrayList<String> getMessages() {
+        return messages;
     }
 }

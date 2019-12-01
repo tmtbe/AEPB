@@ -1,12 +1,14 @@
 import java.util.Date;
 import java.util.HashSet;
 
-public class ParkingLot {
+public class ParkingLot implements Parking{
     private HashSet<String> contains = new HashSet<>();
     private HashSet<String> carIds = new HashSet<>();
     private long maxContain;
-    public ParkingLot(int i, int i1) {
+    private String name;
+    public ParkingLot(String name,int i, int i1) {
         this.maxContain = i*i1;
+        this.name = name;
     }
 
     public long getMaxContain(){
@@ -27,6 +29,7 @@ public class ParkingLot {
         }
         contains.add(parkingTicket.toString());
         carIds.add(car.getCarId());
+        parkingTicket.addMessage(this.getName());
         return parkingTicket;
     }
 
@@ -38,5 +41,22 @@ public class ParkingLot {
         ParkingTicket.destory(parkingTicket);
         contains.remove(parkingTicket.toString());
         carIds.remove(parkingTicket.getCar().getCarId());
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public boolean isFull() {
+        return contains.size()==maxContain;
+    }
+
+    public static String getName(ParkingTicket parkingTicket) throws TicketException {
+        if (parkingTicket.getMessages().size() >= 1) {
+            return parkingTicket.getMessages().get(0);
+        } else {
+            throw new TicketException("获取信息失败");
+        }
     }
 }
