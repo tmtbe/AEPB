@@ -1,6 +1,6 @@
 package com.aepb.parking.repo;
 
-import com.aepb.parking.dto.ManagerBoy;
+import com.aepb.parking.model.ManagerBoy;
 
 public class ManagerBoyRepo {
     public void insertManagerBoy(ManagerBoy managerBoy) {

@@ -1,4 +1,4 @@
-package com.aepb.parking.dto;
+package com.aepb.parking.model;
 
 import com.aepb.parking.repo.Table;
 
@@ -6,6 +6,7 @@ public class LotCarRelation implements Table {
     private Long id;
     private Long lotId;
     private String carId;
+
     @Override
     public Long getId() {
         return id;

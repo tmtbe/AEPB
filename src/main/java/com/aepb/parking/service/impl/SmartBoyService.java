@@ -3,16 +3,17 @@ package com.aepb.parking.service.impl;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
 import com.aepb.parking.model.ManagerBoyLotRelation;
+import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
 
 import java.util.List;
 
-public class GraduateBoyService extends AbstractService implements Parking {
+public class SmartBoyService extends AbstractService implements Parking {
     private ManagerBoyService managerBoyService;
 
-    public GraduateBoyService() {
+    public SmartBoyService() {
         managerBoyService = application.getComponent(ManagerBoyService.class);
     }
 
@@ -25,15 +26,21 @@ public class GraduateBoyService extends AbstractService implements Parking {
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
         List<ManagerBoyLotRelation> managerBoyLotRelations = managerBoyLotRelationRepo.selectByBoyId(boyId);
         managerBoyLotRelations.sort((A, B) -> {
-            if (A.getId() > B.getId()) {
+            if (getSurplus(A) > getSurplus(B)) {
                 return 1;
-            } else if (A.getId() < B.getId()) {
+            } else if (getSurplus(B) > getSurplus(A)) {
                 return -1;
             } else {
                 return 0;
             }
         });
         return managerBoyService.defaultPark(managerBoyLotRelations, boyId, car);
+    }
+
+    private Long getSurplus(ManagerBoyLotRelation managerBoyLotRelation) {
+        ParkingLot parkingLot = parkingLotRepo.selectParkingLotById(managerBoyLotRelation.getLotId());
+        Long count = lotCarRelationRepo.countByLotId(managerBoyLotRelation.getLotId());
+        return parkingLot.getMaxCapacity()-count;
     }
 
     @Override

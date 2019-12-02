@@ -1,4 +1,4 @@
-package com.aepb.parking.dto;
+package com.aepb.parking.model;
 
 import com.aepb.parking.repo.Table;
 
@@ -6,6 +6,7 @@ public class ManagerBoyLotRelation implements Table {
     private Long id;
     private Long boyId;
     private Long lotId;
+
     @Override
     public Long getId() {
         return id;

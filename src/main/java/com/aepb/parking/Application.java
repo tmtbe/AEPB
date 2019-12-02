@@ -1,47 +1,28 @@
 package com.aepb.parking;
 
-import com.aepb.parking.dto.LotCarRelation;
-import com.aepb.parking.dto.ManagerBoyTicketRelation;
 import com.aepb.parking.repo.*;
 
-public enum  Application {
+import java.util.HashMap;
+
+public enum Application {
     app;
-    private final LotCarRelationRepo lotCarRelationRepo;
-    private final ManagerBoyLotRelationRepo managerBoyLotRelationRepo;
-    private final ParkingTicketRepo parkingTicketRepo;
-    private final ManagerBoyRepo managerBoyRepo;
-    private final ParkingLotRepo parkingLotRepo;
-    private final ManagerBoyTicketRelationRepo managerBoyTicketRelationRepo;
-    Application(){
-        this.parkingTicketRepo = new ParkingTicketRepo();
-        this.managerBoyRepo = new ManagerBoyRepo();
-        this.parkingLotRepo = new ParkingLotRepo();
-        this.lotCarRelationRepo = new LotCarRelationRepo();
-        this.managerBoyLotRelationRepo = new ManagerBoyLotRelationRepo();
-        this.managerBoyTicketRelationRepo = new ManagerBoyTicketRelationRepo();
-    }
 
-    public ParkingTicketRepo getParkingTicketRepo() {
-        return parkingTicketRepo;
-    }
+    private final HashMap<Class, Object> componentHashMap = new HashMap<>();
 
-    public ManagerBoyRepo getManagerBoyRepo() {
-        return managerBoyRepo;
-    }
-
-    public ParkingLotRepo getParkingLotRepo() {
-        return parkingLotRepo;
-    }
-
-    public LotCarRelationRepo getLotCarRelationRepo() {
-        return lotCarRelationRepo;
-    }
-
-    public ManagerBoyLotRelationRepo getManagerBoyLotRelationRepo() {
-        return managerBoyLotRelationRepo;
-    }
-
-    public ManagerBoyTicketRelationRepo getManagerBoyTicketRelationRepo() {
-        return managerBoyTicketRelationRepo;
+    public <T> T getComponent(Class<T> tClass) {
+        if (componentHashMap.containsKey(tClass)) {
+            return (T) componentHashMap.get(tClass);
+        } else {
+            T t = null;
+            try {
+                t = tClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            componentHashMap.put(tClass, t);
+            return t;
+        }
     }
 }

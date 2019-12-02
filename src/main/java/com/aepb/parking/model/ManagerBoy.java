@@ -1,13 +1,20 @@
-package com.aepb.parking.dto;
+package com.aepb.parking.model;
 
+import com.aepb.parking.enums.ManagerBoyType;
 import com.aepb.parking.repo.Table;
 
 public class ManagerBoy implements Table {
     private Long id;
     private String name;
+    private ManagerBoyType type;
+
     @Override
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -18,7 +25,11 @@ public class ManagerBoy implements Table {
         this.name = name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public ManagerBoyType getType() {
+        return type;
+    }
+
+    public void setType(ManagerBoyType type) {
+        this.type = type;
     }
 }

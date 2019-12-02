@@ -1,9 +1,6 @@
-package com.aepb.parking.dto;
+package com.aepb.parking.model;
 
-import com.aepb.parking.Application;
-import com.aepb.parking.exception.TicketException;
 import com.aepb.parking.repo.Table;
-import com.aepb.parking.service.Car;
 import com.aepb.parking.utils.SnowId;
 
 import java.util.Date;
