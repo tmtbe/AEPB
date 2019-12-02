@@ -23,11 +23,6 @@ public class ParkingTicket implements Table {
         this.createTime = createTime;
     }
 
-    @Override
-    public Long getId() {
-        return id;
-    }
-
     public Long getParkingLotId() {
         return parkingLotId;
     }
@@ -74,5 +69,13 @@ public class ParkingTicket implements Table {
 
     public void setLotCarRelationId(Long lotCarRelationId) {
         this.lotCarRelationId = lotCarRelationId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

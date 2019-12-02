@@ -33,4 +33,8 @@ public enum  HashDb {
             longTableHashMap.remove(id);
         }
     }
+
+    public HashMap<Long, Table> getByClass(Class<LotCarRelation> lotCarRelationClass) {
+        return hashMap.get(lotCarRelationClass);
+    }
 }

@@ -1,22 +1,23 @@
 package com.aepb.parking.service.impl;
 
 import com.aepb.parking.Application;
+import com.aepb.parking.dto.LotCarRelation;
 import com.aepb.parking.dto.ManagerBoy;
 import com.aepb.parking.dto.ParkingTicket;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
+import com.aepb.parking.utils.SnowId;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 
 public enum  GraduateBoyService implements Parking {
     service;
-    private LinkedHashMap<String, ParkingLotService> parkingLotHashMap = new LinkedHashMap<>();
-    private ArrayList<ParkingLotService> parkingLotList = new ArrayList<>();
 
-    public String getName(ParkingTicket parkingTicket) throws TicketException {
+    public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
         Long managerId = parkingTicket.getManagerId();
         if(managerId==null){
             throw new TicketException("获取信息失败");
@@ -29,37 +30,29 @@ public enum  GraduateBoyService implements Parking {
         }
     }
 
-    @Override
-    public ParkingTicket park(Car car) throws ParkingException {
-        ParkingTicket parkingTicket = null;
-        for (ParkingLotService parkingLot : parkingLotList) {
-            if (parkingLot.isFull()) continue;
-            parkingTicket = parkingLot.park(car);
-            break;
-        }
-        if (parkingTicket != null) {
-            parkingTicket.addMessage(this.name);
-            return parkingTicket;
-        } else {
-            throw new ParkingException("没有停车位了");
-        }
+    public ParkingTicket park(Long lotId,Car car) throws ParkingException {
+        LotCarRelation lotCarRelation = Application.app.getLotCarRelationRepo().insertLotCarRelationWithLotId(car.getCarId(), lotId);
+        ParkingTicket parkingTicket = new ParkingTicket();
+        parkingTicket.setId(SnowId.Snow.nextId());
+        parkingTicket.setCarId(car.getCarId());
+        parkingTicket.setCreateTime(new Date());
+        parkingTicket.setParkingLotId(lotId);
+        parkingTicket.setLotCarRelationId(lotCarRelation.getId());
+        parkingTicket.setPick(false);
+        Application.app.getParkingTicketRepo().insertTicket(parkingTicket);
+        return parkingTicket;
     }
 
-    @Override
-    public void unPark(ParkingTicket parkingTicket) throws ParkingException, TicketException {
-        if (!this.name.equals(GraduateBoyService.getName(parkingTicket))) {
-            throw new ParkingException("拒绝办理");
+    public void unPark(Long parkingTicketId) throws TicketException {
+        ParkingTicket parkingTicket = Application.app.getParkingTicketRepo().selectTicketById(parkingTicketId);
+        if (parkingTicket == null) {
+            throw new TicketException("不存在的票据");
         }
-        ParkingLotService parkingLot = parkingLotHashMap.get(ParkingLotService.getName(parkingTicket));
-        if (parkingLot == null) {
-            throw new ParkingException("拒绝办理");
+        if(parkingTicket.isPick()){
+            throw new TicketException("已取过车票");
         }
-        parkingLot.unPark(parkingTicket);
-    }
-
-    @Override
-    public String getName() {
-        return name;
+        Application.app.getParkingTicketRepo().updateTicket(parkingTicket);
+        Application.app.getLotCarRelationRepo().deleteLotCarRelationById(parkingTicket.getLotCarRelationId());
     }
 
     public void bindParkLot(ParkingLotService... parkingLot) {

@@ -16,12 +16,8 @@ import java.util.HashSet;
 
 public enum ParkingLotService implements Parking {
     service;
-    private HashSet<String> contains = new HashSet<>();
-    private HashSet<String> carIds = new HashSet<>();
-    private long maxContain;
-    private String name;
 
-    public String getName(ParkingTicket parkingTicket) throws TicketException {
+    public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
         Long parkingLotId = parkingTicket.getParkingLotId();
         if(parkingLotId==null){
             throw new TicketException("获取信息失败");
@@ -34,33 +30,20 @@ public enum ParkingLotService implements Parking {
         }
     }
 
-    public long getMaxContain() {
-        return maxContain;
-    }
-
-    public ParkingTicket park(Long id,Car car) throws ParkingException {
-        ParkingLot parkingLot = Application.app.getParkingLotRepo().selectParkingLotById(id);
-        if(parkingLot==null){
-            throw new ParkingException("不存在该停车场");
-        }
-        if (contains.size() >= maxContain) {
-            throw new ParkingException("已满");
-        }
-        LotCarRelation lotCarRelation = new LotCarRelation();
-        lotCarRelation.setId(SnowId.Snow.nextId());
-        lotCarRelation.setCarId(car.getCarId());
-        lotCarRelation.setLotId(parkingLot.getId());
-        Application.app.getLotCarRelationRepo().insertLotCarRelation(lotCarRelation);
+    public ParkingTicket park(Long lotId,Car car) throws ParkingException {
+        LotCarRelation lotCarRelation = Application.app.getLotCarRelationRepo().insertLotCarRelationWithLotId(car.getCarId(), lotId);
         ParkingTicket parkingTicket = new ParkingTicket();
+        parkingTicket.setId(SnowId.Snow.nextId());
         parkingTicket.setCarId(car.getCarId());
         parkingTicket.setCreateTime(new Date());
-        parkingTicket.setParkingLotId(parkingLot.getId());
+        parkingTicket.setParkingLotId(lotId);
         parkingTicket.setLotCarRelationId(lotCarRelation.getId());
         parkingTicket.setPick(false);
+        Application.app.getParkingTicketRepo().insertTicket(parkingTicket);
         return parkingTicket;
     }
 
-    public void unPark(Long parkingTicketId) throws ParkingException, TicketException {
+    public void unPark(Long parkingTicketId) throws TicketException {
         ParkingTicket parkingTicket = Application.app.getParkingTicketRepo().selectTicketById(parkingTicketId);
         if (parkingTicket == null) {
             throw new TicketException("不存在的票据");
@@ -70,14 +53,5 @@ public enum ParkingLotService implements Parking {
         }
         Application.app.getParkingTicketRepo().updateTicket(parkingTicket);
         Application.app.getLotCarRelationRepo().deleteLotCarRelationById(parkingTicket.getLotCarRelationId());
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public boolean isFull() {
-        return contains.size() == maxContain;
     }
 }
