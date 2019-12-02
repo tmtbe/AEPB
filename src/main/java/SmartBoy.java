@@ -1,8 +1,3 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-
 public class SmartBoy extends GraduateBoy{
 
     public SmartBoy(String name) {
@@ -11,7 +6,7 @@ public class SmartBoy extends GraduateBoy{
     @Override
     public void bindParkLot(ParkingLot... parkingLot) {
         super.bindParkLot(parkingLot);
-        Collections.sort(parkingLotList);
+        parkingLotList.sort((A,B)-> Long.compare(B.getEmpytyCount(), A.getEmpytyCount()));;
     }
 
     public static String getName(ParkingTicket parkingTicket) throws TicketException {
