@@ -34,7 +34,7 @@ public enum  HashDb {
         }
     }
 
-    public HashMap<Long, Table> getByClass(Class<LotCarRelation> lotCarRelationClass) {
+    public <T> HashMap<Long, Table> getByClass(Class<T> lotCarRelationClass) {
         return hashMap.get(lotCarRelationClass);
     }
 }

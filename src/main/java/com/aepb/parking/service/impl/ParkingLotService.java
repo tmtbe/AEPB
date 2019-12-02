@@ -18,11 +18,11 @@ public enum ParkingLotService implements Parking {
     service;
 
     public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
-        Long parkingLotId = parkingTicket.getParkingLotId();
-        if(parkingLotId==null){
+        LotCarRelation lotCarRelation = Application.app.getLotCarRelationRepo().selectLotCarRelationById(parkingTicket.getLotCarRelationId());
+        if(lotCarRelation==null){
             throw new TicketException("获取信息失败");
         }
-        ParkingLot parkingLot = Application.app.getParkingLotRepo().selectParkingLotById(parkingLotId);
+        ParkingLot parkingLot = Application.app.getParkingLotRepo().selectParkingLotById(lotCarRelation.getLotId());
         if(parkingLot==null){
             throw new TicketException("获取信息失败");
         }else{
@@ -34,9 +34,7 @@ public enum ParkingLotService implements Parking {
         LotCarRelation lotCarRelation = Application.app.getLotCarRelationRepo().insertLotCarRelationWithLotId(car.getCarId(), lotId);
         ParkingTicket parkingTicket = new ParkingTicket();
         parkingTicket.setId(SnowId.Snow.nextId());
-        parkingTicket.setCarId(car.getCarId());
         parkingTicket.setCreateTime(new Date());
-        parkingTicket.setParkingLotId(lotId);
         parkingTicket.setLotCarRelationId(lotCarRelation.getId());
         parkingTicket.setPick(false);
         Application.app.getParkingTicketRepo().insertTicket(parkingTicket);

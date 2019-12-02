@@ -1,11 +1,10 @@
 package com.aepb.parking.service.impl;
 
 import com.aepb.parking.Application;
-import com.aepb.parking.dto.LotCarRelation;
-import com.aepb.parking.dto.ManagerBoy;
-import com.aepb.parking.dto.ParkingTicket;
+import com.aepb.parking.dto.*;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
+import com.aepb.parking.repo.Table;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
 import com.aepb.parking.utils.SnowId;
@@ -13,16 +12,18 @@ import com.aepb.parking.utils.SnowId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public enum  GraduateBoyService implements Parking {
     service;
 
     public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
-        Long managerId = parkingTicket.getManagerId();
-        if(managerId==null){
+        ManagerBoyTicketRelation managerBoyTicketRelation = Application.app.getManagerBoyTicketRelationRepo().selectManagerBoyTicketRelationById(parkingTicket.getId());
+        if(managerBoyTicketRelation==null){
             throw new TicketException("获取信息失败");
         }
-        ManagerBoy managerBoy = Application.app.getManagerBoyRepo().selectManagerBoyById(managerId);
+        Long boyId = managerBoyTicketRelation.getBoyId();
+        ManagerBoy managerBoy = Application.app.getManagerBoyRepo().selectManagerBoyById(boyId);
         if(managerBoy==null){
             throw new TicketException("获取信息失败");
         }else{
@@ -30,35 +31,24 @@ public enum  GraduateBoyService implements Parking {
         }
     }
 
-    public ParkingTicket park(Long lotId,Car car) throws ParkingException {
-        LotCarRelation lotCarRelation = Application.app.getLotCarRelationRepo().insertLotCarRelationWithLotId(car.getCarId(), lotId);
-        ParkingTicket parkingTicket = new ParkingTicket();
-        parkingTicket.setId(SnowId.Snow.nextId());
-        parkingTicket.setCarId(car.getCarId());
-        parkingTicket.setCreateTime(new Date());
-        parkingTicket.setParkingLotId(lotId);
-        parkingTicket.setLotCarRelationId(lotCarRelation.getId());
-        parkingTicket.setPick(false);
-        Application.app.getParkingTicketRepo().insertTicket(parkingTicket);
-        return parkingTicket;
+    public ParkingTicket park(Long boyId,Car car) throws ParkingException {
+        List<Table> managerBoyLotRelationList = Application.app.getManagerBoyLotRelationRepo().selectByBoyId(boyId);
+        if(managerBoyLotRelationList.isEmpty()) throw new ParkingException("Boy没有可用的停车场");
+        ManagerBoyLotRelation selectOne = (ManagerBoyLotRelation) managerBoyLotRelationList.get(0);
+        ParkingTicket ticket = ParkingLotService.service.park(selectOne.getLotId(), car);
+        ManagerBoyTicketRelation managerBoyTicketRelation = new ManagerBoyTicketRelation();
+        managerBoyTicketRelation.setBoyId(boyId);
+        managerBoyTicketRelation.setId(SnowId.Snow.nextId());
+        managerBoyTicketRelation.setTicketId(ticket.getId());
+        Application.app.getManagerBoyTicketRelationRepo().insertManagerBoyTicketRelation(managerBoyTicketRelation);
+        return ticket;
     }
 
     public void unPark(Long parkingTicketId) throws TicketException {
-        ParkingTicket parkingTicket = Application.app.getParkingTicketRepo().selectTicketById(parkingTicketId);
-        if (parkingTicket == null) {
-            throw new TicketException("不存在的票据");
-        }
-        if(parkingTicket.isPick()){
-            throw new TicketException("已取过车票");
-        }
-        Application.app.getParkingTicketRepo().updateTicket(parkingTicket);
-        Application.app.getLotCarRelationRepo().deleteLotCarRelationById(parkingTicket.getLotCarRelationId());
+        ParkingLotService.service.unPark(parkingTicketId);
     }
 
     public void bindParkLot(ParkingLotService... parkingLot) {
-        for (ParkingLotService lot : parkingLot) {
-            this.parkingLotHashMap.put(lot.getName(), lot);
-            this.parkingLotList.add(lot);
-        }
+
     }
 }

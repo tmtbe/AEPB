@@ -11,32 +11,14 @@ import java.util.Date;
 public class ParkingTicket implements Table {
     private Long id;
     private Long lotCarRelationId;
-    private Long parkingLotId;
-    private Long managerId;
     private Date createTime;
-    private String carId;
     private Boolean pick;
 
-    public void gen(Car car, Date createTime) {
+    public void create(Long lotCarRelationId) {
         this.id = SnowId.Snow.nextId();
-        this.carId = car.getCarId();
-        this.createTime = createTime;
-    }
-
-    public Long getParkingLotId() {
-        return parkingLotId;
-    }
-
-    public void setParkingLotId(Long parkingLotId) {
-        this.parkingLotId = parkingLotId;
-    }
-
-    public Long getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(Long managerId) {
-        this.managerId = managerId;
+        this.lotCarRelationId = lotCarRelationId;
+        this.createTime = new Date();
+        this.pick = false;
     }
 
     public Date getCreateTime() {
@@ -47,13 +29,6 @@ public class ParkingTicket implements Table {
         this.createTime = createTime;
     }
 
-    public String getCarId() {
-        return carId;
-    }
-
-    public void setCarId(String carId) {
-        this.carId = carId;
-    }
 
     public Boolean isPick() {
         return pick;
