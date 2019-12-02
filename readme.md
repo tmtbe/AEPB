@@ -17,6 +17,8 @@
 
 9、GraduateBoy只帮忙取自己发放的Ticket的车
 
+10、SmartBoy优先选择最空的停车场停车
+
 # Testing
 ## 停车获取凭证
 given：车
@@ -99,3 +101,8 @@ then：拒绝
 given：ticket
 when：通过ticket能定位停车场和管理员
 then：ok
+
+## SmartBoy优先级
+given: 车，boy，停车场s
+when：A停车场空位>B停车场空位
+then：停A

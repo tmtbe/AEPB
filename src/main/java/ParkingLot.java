@@ -1,7 +1,7 @@
 import java.util.Date;
 import java.util.HashSet;
 
-public class ParkingLot implements Parking{
+public class ParkingLot implements Parking,Comparable{
     private HashSet<String> contains = new HashSet<>();
     private HashSet<String> carIds = new HashSet<>();
     private long maxContain;
@@ -57,6 +57,16 @@ public class ParkingLot implements Parking{
             return parkingTicket.getMessages().get(0);
         } else {
             throw new TicketException("获取信息失败");
+        }
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        ParkingLot parkingLot = (ParkingLot) o;
+        if(parkingLot.maxContain-parkingLot.contains.size()>this.maxContain-this.contains.size()) {
+            return 1;
+        }else{
+            return -1;
         }
     }
 }

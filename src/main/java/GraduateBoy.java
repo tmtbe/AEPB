@@ -1,9 +1,9 @@
 import java.util.*;
 
 public class GraduateBoy implements Parking{
-    private String name;
-    private LinkedHashMap<String,ParkingLot> parkingLotHashMap = new LinkedHashMap<>();
-    private ArrayList<ParkingLot> parkingLotList = new ArrayList<>();
+    protected String name;
+    protected LinkedHashMap<String,ParkingLot> parkingLotHashMap = new LinkedHashMap<>();
+    protected ArrayList<ParkingLot> parkingLotList = new ArrayList<>();
     public GraduateBoy(String name){
         this.name = name;
     }
