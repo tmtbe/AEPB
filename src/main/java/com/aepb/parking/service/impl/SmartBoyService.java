@@ -26,13 +26,9 @@ public class SmartBoyService extends AbstractService implements Parking {
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
         List<ManagerBoyLotRelation> managerBoyLotRelations = managerBoyLotRelationRepo.selectByBoyId(boyId);
         managerBoyLotRelations.sort((A, B) -> {
-            if (getSurplus(A) > getSurplus(B)) {
-                return 1;
-            } else if (getSurplus(B) > getSurplus(A)) {
-                return -1;
-            } else {
-                return 0;
-            }
+            int result = getSurplus(B).compareTo(getSurplus(A));
+            if(result == 0) result = A.getId().compareTo(B.getId());
+            return result;
         });
         return managerBoyService.defaultPark(managerBoyLotRelations, boyId, car);
     }

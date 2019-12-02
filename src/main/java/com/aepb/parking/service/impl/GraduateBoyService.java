@@ -7,6 +7,7 @@ import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class GraduateBoyService extends AbstractService implements Parking {
@@ -24,15 +25,7 @@ public class GraduateBoyService extends AbstractService implements Parking {
     @Override
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
         List<ManagerBoyLotRelation> managerBoyLotRelations = managerBoyLotRelationRepo.selectByBoyId(boyId);
-        managerBoyLotRelations.sort((A, B) -> {
-            if (A.getId() > B.getId()) {
-                return 1;
-            } else if (A.getId() < B.getId()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
+        managerBoyLotRelations.sort(Comparator.comparing(ManagerBoyLotRelation::getId));
         return managerBoyService.defaultPark(managerBoyLotRelations, boyId, car);
     }
 
