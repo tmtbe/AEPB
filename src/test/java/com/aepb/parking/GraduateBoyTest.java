@@ -1,22 +1,30 @@
+package com.aepb.parking;
+
+import com.aepb.parking.exception.ParkingException;
+import com.aepb.parking.exception.TicketException;
+import com.aepb.parking.service.impl.GraduateBoyService;
+import com.aepb.parking.service.impl.ParkingLotService;
+import com.aepb.parking.dto.ParkingTicket;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
 public class GraduateBoyTest {
-    private ParkingLot parkingLotA;
-    private ParkingLot parkingLotB;
+    private ParkingLotService parkingLotA;
+    private ParkingLotService parkingLotB;
     private TestCar testCarA;
     private TestCar testCarB;
     private TestCar testCarC;
     private TestCar testCarD;
-    private GraduateBoy graduateBoy;
+    private GraduateBoyService graduateBoy;
     @Before
     public void init(){
-        parkingLotA = new ParkingLot("parkA",1,2);
-        parkingLotB = new ParkingLot("parkB",1,1);
+        parkingLotA = new ParkingLotService("parkA",1,2);
+        parkingLotB = new ParkingLotService("parkB",1,1);
 
-        graduateBoy = new GraduateBoy("boyA");
+        graduateBoy = new GraduateBoyService("boyA");
         graduateBoy.bindParkLot(parkingLotA, parkingLotB);
 
         testCarA = new TestCar("粤A12133");
@@ -43,17 +51,17 @@ public class GraduateBoyTest {
         ParkingTicket ticketA = graduateBoy.park(testCarA);
         ParkingTicket ticketB = graduateBoy.park(testCarB);
         ParkingTicket ticketC = graduateBoy.park(testCarC);
-        assertEquals(parkingLotB.getName(),ParkingLot.getName(ticketC));
-        assertEquals(parkingLotA.getName(),ParkingLot.getName(ticketB));
-        assertEquals(parkingLotA.getName(),ParkingLot.getName(ticketA));
+        assertEquals(parkingLotB.getName(), ParkingLotService.getName(ticketC));
+        assertEquals(parkingLotA.getName(), ParkingLotService.getName(ticketB));
+        assertEquals(parkingLotA.getName(), ParkingLotService.getName(ticketA));
     }
 
     @Test
     public void should_get_ticket_info() throws ParkingException, TicketException {
         ParkingTicket ticket = graduateBoy.park(testCarB);
         assertNotNull(ticket.getMessages());
-        assertEquals(parkingLotA.getName(),ParkingLot.getName(ticket));
-        assertEquals(graduateBoy.getName(),GraduateBoy.getName(ticket));
+        assertEquals(parkingLotA.getName(), ParkingLotService.getName(ticket));
+        assertEquals(graduateBoy.getName(), GraduateBoyService.getName(ticket));
     }
 
     @Test
@@ -65,16 +73,5 @@ public class GraduateBoyTest {
     public void should_not_unPark() throws ParkingException, TicketException {
         ParkingTicket ticket = parkingLotA.park(testCarA);
         graduateBoy.unPark(ticket);
-    }
-
-    class TestCar implements Car{
-        private String carId;
-        public TestCar(String carId){
-            this.carId = carId;
-        }
-        @Override
-        public String getCarId() {
-            return carId;
-        }
     }
 }

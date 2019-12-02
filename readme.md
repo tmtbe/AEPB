@@ -11,7 +11,7 @@
 
 6、凭证不得重复，不具备字面上逻辑关联性，且一次性UUID
 
-7、GraduateBoy 管理多个停车场
+7、com.aepb.parking.dto.GraduateBoy理多个停车场
 
 8、GraduateBoy按停车场顺序停车
 

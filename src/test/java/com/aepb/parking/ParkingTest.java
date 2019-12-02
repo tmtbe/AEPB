@@ -1,3 +1,9 @@
+package com.aepb.parking;
+
+import com.aepb.parking.exception.ParkingException;
+import com.aepb.parking.exception.TicketException;
+import com.aepb.parking.service.impl.ParkingLotService;
+import com.aepb.parking.dto.ParkingTicket;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -6,13 +12,13 @@ import java.util.Date;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNotSame;
 
-public class ParkingTest {
-    private ParkingLot parkingLot;
+public class ParkingTest extends BaseTest{
+    private ParkingLotService parkingLot;
     private TestCar testCarA;
     private TestCar testCarB;
     @Before
     public void init(){
-        parkingLot = new ParkingLot("park",10,10);
+        parkingLot = new ParkingLotService("park",10,10);
         testCarA = new TestCar("粤A12133");
         testCarB = new TestCar("粤B12232");
     }
@@ -74,16 +80,5 @@ public class ParkingTest {
         ParkingTicket ticket = parkingLot.park(testCarA);
         parkingLot.unPark(ticket);
         parkingLot.unPark(ticket);
-    }
-
-    class TestCar implements Car{
-        private String carId;
-        public TestCar(String carId){
-            this.carId = carId;
-        }
-        @Override
-        public String getCarId() {
-            return carId;
-        }
     }
 }
