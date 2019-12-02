@@ -11,16 +11,12 @@ import com.aepb.parking.service.Parking;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class GraduateBoyService implements Parking {
-    private String name;
+public enum  GraduateBoyService implements Parking {
+    service;
     private LinkedHashMap<String, ParkingLotService> parkingLotHashMap = new LinkedHashMap<>();
     private ArrayList<ParkingLotService> parkingLotList = new ArrayList<>();
 
-    public GraduateBoyService(String name) {
-        this.name = name;
-    }
-
-    public static String getName(ParkingTicket parkingTicket) throws TicketException {
+    public String getName(ParkingTicket parkingTicket) throws TicketException {
         Long managerId = parkingTicket.getManagerId();
         if(managerId==null){
             throw new TicketException("获取信息失败");

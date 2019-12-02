@@ -1,18 +1,21 @@
 package com.aepb.parking;
 
-import com.aepb.parking.repo.ManagerBoyRepo;
-import com.aepb.parking.repo.ParkingLotRepo;
-import com.aepb.parking.repo.ParkingTicketRepo;
+import com.aepb.parking.dto.LotCarRelation;
+import com.aepb.parking.repo.*;
 
 public enum  Application {
     app;
-    private ParkingTicketRepo parkingTicketRepo;
-    private ManagerBoyRepo managerBoyRepo;
-    private ParkingLotRepo parkingLotRepo;
+    private final LotCarRelationRepo lotCarRelationRepo;
+    private final ManagerBoyLotRelationRepo managerBoyLotRelationRepo;
+    private final ParkingTicketRepo parkingTicketRepo;
+    private final ManagerBoyRepo managerBoyRepo;
+    private final ParkingLotRepo parkingLotRepo;
     Application(){
         this.parkingTicketRepo = new ParkingTicketRepo();
         this.managerBoyRepo = new ManagerBoyRepo();
         this.parkingLotRepo = new ParkingLotRepo();
+        this.lotCarRelationRepo = new LotCarRelationRepo();
+        this.managerBoyLotRelationRepo = new ManagerBoyLotRelationRepo();
     }
 
     public ParkingTicketRepo getParkingTicketRepo() {
@@ -25,5 +28,13 @@ public enum  Application {
 
     public ParkingLotRepo getParkingLotRepo() {
         return parkingLotRepo;
+    }
+
+    public LotCarRelationRepo getLotCarRelationRepo() {
+        return lotCarRelationRepo;
+    }
+
+    public ManagerBoyLotRelationRepo getManagerBoyLotRelationRepo() {
+        return managerBoyLotRelationRepo;
     }
 }

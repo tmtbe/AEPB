@@ -10,26 +10,16 @@ import java.util.Date;
 
 public class ParkingTicket implements Table {
     private Long id;
+    private Long lotCarRelationId;
     private Long parkingLotId;
     private Long managerId;
     private Date createTime;
-    private Car car;
-
-    public static ParkingTicket validate(Long id) throws TicketException {
-        ParkingTicket parkingTicket = Application.app.getParkingTicketRepo().selectTicketById(id);
-        if (parkingTicket == null) {
-            throw new TicketException("不存在的票据");
-        }
-        return parkingTicket;
-    }
-
-    public static void destroy(ParkingTicket parkingTicket) {
-
-    }
+    private String carId;
+    private Boolean pick;
 
     public void gen(Car car, Date createTime) {
         this.id = SnowId.Snow.nextId();
-        this.car = car;
+        this.carId = car.getCarId();
         this.createTime = createTime;
     }
 
@@ -62,11 +52,27 @@ public class ParkingTicket implements Table {
         this.createTime = createTime;
     }
 
-    public Car getCar() {
-        return car;
+    public String getCarId() {
+        return carId;
     }
 
-    public void setCar(Car car) {
-        this.car = car;
+    public void setCarId(String carId) {
+        this.carId = carId;
+    }
+
+    public Boolean isPick() {
+        return pick;
+    }
+
+    public void setPick(Boolean pick) {
+        this.pick = pick;
+    }
+
+    public Long getLotCarRelationId() {
+        return lotCarRelationId;
+    }
+
+    public void setLotCarRelationId(Long lotCarRelationId) {
+        this.lotCarRelationId = lotCarRelationId;
     }
 }

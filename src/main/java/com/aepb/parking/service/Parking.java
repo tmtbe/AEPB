@@ -5,9 +5,9 @@ import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
 
 public interface Parking {
-    ParkingTicket park(Car car) throws ParkingException;
+    ParkingTicket park(Long id,Car car) throws ParkingException;
 
-    void unPark(ParkingTicket parkingTicket) throws ParkingException, TicketException;
+    void unPark(Long parkingTicketId) throws ParkingException, TicketException;
 
     String getName();
 }

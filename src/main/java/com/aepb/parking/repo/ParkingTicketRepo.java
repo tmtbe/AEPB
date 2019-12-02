@@ -9,4 +9,8 @@ public class ParkingTicketRepo {
    public ParkingTicket selectTicketById(Long id){
       return HashDb.DB.getById(ParkingTicket.class,id);
    }
+
+    public void updateTicket(ParkingTicket parkingTicket) {
+       HashDb.DB.add(parkingTicket);
+    }
 }

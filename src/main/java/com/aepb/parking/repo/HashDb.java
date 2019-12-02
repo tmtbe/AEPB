@@ -1,5 +1,7 @@
 package com.aepb.parking.repo;
 
+import com.aepb.parking.dto.LotCarRelation;
+
 import java.util.HashMap;
 
 public enum  HashDb {
@@ -22,6 +24,13 @@ public enum  HashDb {
             return (T) result;
         }else{
             return null;
+        }
+    }
+
+    public <T> void remove(Class<T> table, Long id) {
+        if(hashMap.containsKey(table)){
+            HashMap<Long, Table> longTableHashMap = hashMap.get(table);
+            longTableHashMap.remove(id);
         }
     }
 }

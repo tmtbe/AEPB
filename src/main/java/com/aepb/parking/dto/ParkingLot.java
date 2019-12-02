@@ -5,9 +5,10 @@ import com.aepb.parking.repo.Table;
 public class ParkingLot implements Table {
     private Long id;
     private String name;
+    private Long maxCapacity;
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public String getName() {
@@ -20,5 +21,13 @@ public class ParkingLot implements Table {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(Long maxCapacity) {
+        this.maxCapacity = maxCapacity;
     }
 }
