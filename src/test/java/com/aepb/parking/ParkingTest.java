@@ -1,8 +1,8 @@
 package com.aepb.parking;
 
-import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
+import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.utils.SnowId;
 import org.junit.Before;
@@ -18,7 +18,7 @@ public class ParkingTest extends AbstractTest {
     @Before
     public void setUp(){
         super.setUp();
-        parkingLot = createParkingLot("park",100L);
+        parkingLot = parkingLotRepo.createParkingLot("park", 100L);
         testCarA = new TestCar("粤A12133");
         testCarB = new TestCar("粤B12232");
     }
@@ -55,7 +55,8 @@ public class ParkingTest extends AbstractTest {
         ParkingTicket ticket = parkingLotService.park(parkingLot.getId(),testCarA);
         parkingLotService.unPark(parkingLot.getId(),ticket.getId());
     }
-    @Test(expected = ParkingException.class)
+
+    @Test(expected = TicketException.class)
     public void should_return_fail_double_get_car() throws ParkingException, TicketException {
         ParkingTicket ticket = parkingLotService.park(parkingLot.getId(),testCarA);
         parkingLotService.unPark(parkingLot.getId(),ticket.getId());

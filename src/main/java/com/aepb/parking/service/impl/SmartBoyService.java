@@ -1,9 +1,8 @@
 package com.aepb.parking.service.impl;
 
+import com.aepb.parking.entity.ParkingLotEntity;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.model.ManagerBoyLotRelation;
-import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
@@ -18,25 +17,18 @@ public class SmartBoyService extends AbstractService implements Parking {
     }
 
     @Override
-    public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
-        return managerBoyService.getOwnName(parkingTicket);
-    }
-
-    @Override
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
-        List<ManagerBoyLotRelation> managerBoyLotRelations = managerBoyLotRelationRepo.selectByBoyId(boyId);
-        managerBoyLotRelations.sort((A, B) -> {
+        List<ParkingLotEntity> manageParkingLot = managerBoyRepo.getManageParkingLot(boyId);
+        manageParkingLot.sort((A, B) -> {
             int result = getSurplus(B).compareTo(getSurplus(A));
-            if(result == 0) result = A.getId().compareTo(B.getId());
+            if (result == 0) result = A.getParkingLot().getId().compareTo(B.getParkingLot().getId());
             return result;
         });
-        return managerBoyService.defaultPark(managerBoyLotRelations, boyId, car);
+        return managerBoyService.defaultPark(manageParkingLot, boyId, car);
     }
 
-    private Long getSurplus(ManagerBoyLotRelation managerBoyLotRelation) {
-        ParkingLot parkingLot = parkingLotRepo.selectById(managerBoyLotRelation.getLotId());
-        Long count = lotCarRelationRepo.countByLotId(managerBoyLotRelation.getLotId());
-        return parkingLot.getMaxCapacity()-count;
+    private Long getSurplus(ParkingLotEntity parkingLotEntity) {
+        return parkingLotEntity.getParkingLot().getMaxCapacity() - parkingLotEntity.getCapacity();
     }
 
     @Override

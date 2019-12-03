@@ -1,48 +1,33 @@
 package com.aepb.parking.service.impl;
 
+import com.aepb.parking.entity.ParkingLotEntity;
+import com.aepb.parking.entity.TicketEntity;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.model.*;
+import com.aepb.parking.model.ManagerBoy;
+import com.aepb.parking.model.ParkingLot;
+import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
-import com.aepb.parking.utils.SnowId;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ManagerBoyService extends AbstractService implements Parking {
     private final ParkingLotService parkingLotService;
-    private final TicketService ticketService;
+
     public ManagerBoyService() {
         super();
         parkingLotService = app.getComponent(ParkingLotService.class);
-        ticketService = app.getComponent(TicketService.class);
     }
 
-    public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
-        ManagerBoyTicketRelation managerBoyTicketRelation = managerBoyTicketRelationRepo.selectByTicketId(parkingTicket.getId());
-        if (managerBoyTicketRelation == null) {
-            throw new TicketException("获取信息失败");
-        }
-        Long boyId = managerBoyTicketRelation.getBoyId();
-        ManagerBoy managerBoy = managerBoyRepo.selectById(boyId);
-        if (managerBoy == null) {
-            throw new TicketException("获取信息失败");
-        } else {
-            return managerBoy.getName();
-        }
-    }
-
-    protected ParkingTicket defaultPark(List<ManagerBoyLotRelation> managerBoyLotRelationList, Long boyId, Car car) throws ParkingException {
-        if (managerBoyLotRelationList.isEmpty()) throw new ParkingException("Boy没有可用的停车场");
+    protected ParkingTicket defaultPark(List<ParkingLotEntity> parkingLotEntityList, Long boyId, Car car) throws ParkingException {
+        if (parkingLotEntityList.isEmpty()) throw new ParkingException("Boy没有可用的停车场");
         ParkingTicket ticket;
-        for (ManagerBoyLotRelation managerBoyLotRelation : managerBoyLotRelationList) {
+        for (ParkingLotEntity parkingLotEntity : parkingLotEntityList) {
             try {
-                ticket = parkingLotService.park(managerBoyLotRelation.getLotId(), car);
-                ManagerBoyTicketRelation managerBoyTicketRelation = new ManagerBoyTicketRelation();
-                managerBoyTicketRelation.setBoyId(boyId);
-                managerBoyTicketRelation.setId(SnowId.Snow.nextId());
-                managerBoyTicketRelation.setTicketId(ticket.getId());
-                managerBoyTicketRelationRepo.insert(managerBoyTicketRelation);
+                ticket = parkingLotService.park(parkingLotEntity.getParkingLot().getId(), car);
+                managerBoyRepo.ticketBindManagerBoy(boyId, ticket);
                 return ticket;
             } catch (ParkingException ignored) {
             }
@@ -51,7 +36,7 @@ public class ManagerBoyService extends AbstractService implements Parking {
     }
 
     private Parking getParking(Long boyId) throws ParkingException {
-        ManagerBoy managerBoy = managerBoyRepo.selectById(boyId);
+        ManagerBoy managerBoy = managerBoyRepo.getManagerBoy(boyId);
         switch (managerBoy.getType()) {
             case GraduateBoy:
                 return app.getComponent(GraduateBoyService.class);
@@ -73,28 +58,17 @@ public class ManagerBoyService extends AbstractService implements Parking {
     }
 
     protected void defaultUnPark(Long boyId, Long parkingTicketId) throws TicketException, ParkingException {
-        ParkingTicket parkingTicket = ticketService.getTicketById(parkingTicketId);
-        LotCarRelation lotCarRelation = lotCarRelationRepo.selectById(parkingTicket.getLotCarRelationId());
-        if (lotCarRelation == null) {
-            throw new TicketException("错误");
-        }
-        ManagerBoyTicketRelation managerBoyTicketRelation = managerBoyTicketRelationRepo.selectByTicketId(parkingTicket.getId());
-        if (managerBoyTicketRelation == null) {
-            throw new ParkingException("不存在的关系");
-        }
-        if (!managerBoyTicketRelation.getBoyId().equals(boyId)) {
+        TicketEntity ticketEntity = ticketRepo.getTicketEntity(parkingTicketId);
+        if (ticketEntity.getManagerBoy() == null) {
             throw new ParkingException("拒绝服务");
         }
-        parkingLotService.unPark(lotCarRelation.getLotId(), parkingTicketId);
+        if (!ticketEntity.getManagerBoy().getId().equals(boyId)) {
+            throw new ParkingException("拒绝服务");
+        }
+        parkingLotService.unPark(ticketEntity.getParkingLot().getId(), parkingTicketId);
     }
 
     public void bindParkLot(Long boyId, ParkingLot... parkingLots) {
-        for (ParkingLot parkingLot : parkingLots) {
-            ManagerBoyLotRelation managerBoyLotRelation = new ManagerBoyLotRelation();
-            managerBoyLotRelation.setId(SnowId.Snow.nextId());
-            managerBoyLotRelation.setBoyId(boyId);
-            managerBoyLotRelation.setLotId(parkingLot.getId());
-            managerBoyLotRelationRepo.insert(managerBoyLotRelation);
-        }
+        managerBoyRepo.bindParkLot(boyId, Arrays.asList(parkingLots));
     }
 }

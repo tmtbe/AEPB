@@ -1,8 +1,8 @@
 package com.aepb.parking.service.impl;
 
+import com.aepb.parking.entity.ParkingLotEntity;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.model.ManagerBoyLotRelation;
 import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
@@ -18,15 +18,10 @@ public class GraduateBoyService extends AbstractService implements Parking {
     }
 
     @Override
-    public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
-        return managerBoyService.getOwnName(parkingTicket);
-    }
-
-    @Override
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
-        List<ManagerBoyLotRelation> managerBoyLotRelations = managerBoyLotRelationRepo.selectByBoyId(boyId);
-        managerBoyLotRelations.sort(Comparator.comparing(ManagerBoyLotRelation::getId));
-        return managerBoyService.defaultPark(managerBoyLotRelations, boyId, car);
+        List<ParkingLotEntity> manageParkingLot = managerBoyRepo.getManageParkingLot(boyId);
+        manageParkingLot.sort(Comparator.comparing(n -> n.getParkingLot().getId()));
+        return managerBoyService.defaultPark(manageParkingLot, boyId, car);
     }
 
     @Override

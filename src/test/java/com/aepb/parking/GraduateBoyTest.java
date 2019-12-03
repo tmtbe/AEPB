@@ -1,13 +1,10 @@
 package com.aepb.parking;
 
 import com.aepb.parking.enums.ManagerBoyType;
-import com.aepb.parking.model.ManagerBoy;
-import com.aepb.parking.model.ManagerBoyTicketRelation;
-import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.service.impl.ManagerBoyService;
-import com.aepb.parking.service.impl.ParkingLotService;
+import com.aepb.parking.model.ManagerBoy;
+import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +24,9 @@ public class GraduateBoyTest extends AbstractTest{
     @Before
     public void setUp(){
         super.setUp();
-        parkingLotA = createParkingLot("parkA",1L);
-        parkingLotB = createParkingLot("parkB",2L);
-        graduateBoy = createManagerBoy("boy", ManagerBoyType.GraduateBoy);
+        parkingLotA = parkingLotRepo.createParkingLot("parkA", 1L);
+        parkingLotB = parkingLotRepo.createParkingLot("parkB", 2L);
+        graduateBoy = managerBoyRepo.createManagerBoy("boy", ManagerBoyType.GraduateBoy);
         managerBoyService.bindParkLot(graduateBoy.getId(),parkingLotA, parkingLotB);
 
         testCarA = new TestCar("粤A12133");
@@ -56,16 +53,16 @@ public class GraduateBoyTest extends AbstractTest{
         ParkingTicket ticketA = managerBoyService.park(graduateBoy.getId(),testCarA);
         ParkingTicket ticketB = managerBoyService.park(graduateBoy.getId(),testCarB);
         ParkingTicket ticketC = managerBoyService.park(graduateBoy.getId(),testCarC);
-        assertEquals(parkingLotA.getName(), parkingLotService.getOwnName(ticketA));
-        assertEquals(parkingLotB.getName(), parkingLotService.getOwnName(ticketB));
-        assertEquals(parkingLotB.getName(), parkingLotService.getOwnName(ticketC));
+        assertEquals(parkingLotA.getName(), ticketRepo.getTicketEntity(ticketA.getId()).getParkingLot().getName());
+        assertEquals(parkingLotB.getName(), ticketRepo.getTicketEntity(ticketB.getId()).getParkingLot().getName());
+        assertEquals(parkingLotB.getName(), ticketRepo.getTicketEntity(ticketC.getId()).getParkingLot().getName());
     }
 
     @Test
     public void should_get_ticket_info() throws ParkingException, TicketException {
         ParkingTicket ticket = managerBoyService.park(graduateBoy.getId(),testCarA);
-        assertEquals(graduateBoy.getName(), managerBoyService.getOwnName(ticket));
-        assertEquals(parkingLotA.getName(), parkingLotService.getOwnName(ticket));
+        assertEquals(graduateBoy.getName(), ticketRepo.getTicketEntity(ticket.getId()).getManagerBoy().getName());
+        assertEquals(parkingLotA.getName(), ticketRepo.getTicketEntity(ticket.getId()).getParkingLot().getName());
     }
 
     @Test
