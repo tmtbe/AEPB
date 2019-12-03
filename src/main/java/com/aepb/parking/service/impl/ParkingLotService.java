@@ -1,12 +1,10 @@
 package com.aepb.parking.service.impl;
 
 import com.aepb.parking.model.LotCarRelation;
-import com.aepb.parking.model.ManagerBoyLotRelation;
 import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.repo.LotCarRelationRepo;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
 import com.aepb.parking.utils.SnowId;
@@ -14,6 +12,12 @@ import com.aepb.parking.utils.SnowId;
 import java.util.Date;
 
 public class ParkingLotService extends AbstractService implements Parking {
+    private final TicketService ticketService;
+    public ParkingLotService (){
+        super();
+        ticketService = app.getComponent(TicketService.class);
+    }
+
     public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
         LotCarRelation lotCarRelation = lotCarRelationRepo.selectLotCarRelationById(parkingTicket.getLotCarRelationId());
         if (lotCarRelation == null) {
@@ -39,10 +43,7 @@ public class ParkingLotService extends AbstractService implements Parking {
     }
 
     public void unPark(Long lotId,Long parkingTicketId) throws TicketException, ParkingException {
-        ParkingTicket parkingTicket = parkingTicketRepo.selectTicketById(parkingTicketId);
-        if (parkingTicket == null) {
-            throw new TicketException("不存在的票据");
-        }
+        ParkingTicket parkingTicket = ticketService.getTicketById(parkingTicketId);
         LotCarRelation lotCarRelation = lotCarRelationRepo.selectLotCarRelationById(parkingTicket.getLotCarRelationId());
         if(lotCarRelation==null){
             throw new ParkingException("没有票的信息");

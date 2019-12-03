@@ -9,15 +9,14 @@ import com.aepb.parking.service.impl.ManagerBoyService;
 import com.aepb.parking.service.impl.ParkingLotService;
 import com.aepb.parking.utils.SnowId;
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 public abstract class AbstractTest extends AbstractService {
     protected final ParkingLotService parkingLotService;
     protected final ManagerBoyService managerBoyService;
     public AbstractTest(){
         super();
-        this.parkingLotService = this.application.getComponent(ParkingLotService.class);
-        this.managerBoyService = this.application.getComponent(ManagerBoyService.class);
+        this.parkingLotService = this.app.getComponent(ParkingLotService.class);
+        this.managerBoyService = this.app.getComponent(ManagerBoyService.class);
     }
     @Before
     public void setUp(){

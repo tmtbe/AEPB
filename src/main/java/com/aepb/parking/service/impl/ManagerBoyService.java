@@ -1,6 +1,5 @@
 package com.aepb.parking.service.impl;
 
-import com.aepb.parking.Application;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
 import com.aepb.parking.model.*;
@@ -12,10 +11,11 @@ import java.util.List;
 
 public class ManagerBoyService extends AbstractService implements Parking {
     private final ParkingLotService parkingLotService;
-
+    private final TicketService ticketService;
     public ManagerBoyService() {
         super();
-        parkingLotService = Application.app.getComponent(ParkingLotService.class);
+        parkingLotService = app.getComponent(ParkingLotService.class);
+        ticketService = app.getComponent(TicketService.class);
     }
 
     public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
@@ -54,9 +54,9 @@ public class ManagerBoyService extends AbstractService implements Parking {
         ManagerBoy managerBoy = managerBoyRepo.selectManagerBoyById(boyId);
         switch (managerBoy.getType()) {
             case GraduateBoy:
-                return application.getComponent(GraduateBoyService.class);
+                return app.getComponent(GraduateBoyService.class);
             case SmartBoy:
-                return application.getComponent(SmartBoyService.class);
+                return app.getComponent(SmartBoyService.class);
             default:
                 throw new ParkingException("不支持的类别");
         }
@@ -73,10 +73,7 @@ public class ManagerBoyService extends AbstractService implements Parking {
     }
 
     protected void defaultUnPark(Long boyId, Long parkingTicketId) throws TicketException, ParkingException {
-        ParkingTicket parkingTicket = parkingTicketRepo.selectTicketById(parkingTicketId);
-        if (parkingTicket == null) {
-            throw new TicketException("不存在的票");
-        }
+        ParkingTicket parkingTicket = ticketService.getTicketById(parkingTicketId);
         LotCarRelation lotCarRelation = lotCarRelationRepo.selectLotCarRelationById(parkingTicket.getLotCarRelationId());
         if (lotCarRelation == null) {
             throw new TicketException("错误");

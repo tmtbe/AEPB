@@ -14,7 +14,7 @@ public class GraduateBoyService extends AbstractService implements Parking {
     private ManagerBoyService managerBoyService;
 
     public GraduateBoyService() {
-        managerBoyService = application.getComponent(ManagerBoyService.class);
+        managerBoyService = app.getComponent(ManagerBoyService.class);
     }
 
     @Override

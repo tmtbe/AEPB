@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LotCarRelationRepo {
+public class ParkingLotCarRelationRepo {
     private final ParkingLotRepo parkingLotRepo;
-    public LotCarRelationRepo(){
+    public ParkingLotCarRelationRepo(){
         parkingLotRepo = Application.app.getComponent(ParkingLotRepo.class);
     }
     public Long countByLotId(Long lotId) {
