@@ -1,11 +1,12 @@
-package com.aepb.parking.repo;
+package com.aepb.parking.entity;
 
 import com.aepb.parking.model.ManagerBoy;
 import com.aepb.parking.model.ParkingLot;
-import sun.security.krb5.internal.Ticket;
+import com.aepb.parking.model.ParkingTicket;
+
 
 public class TicketEntity {
-    private Ticket ticket;
+    private ParkingTicket ticket;
     private ParkingLot parkingLot;
     private ManagerBoy managerBoy;
 }

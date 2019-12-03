@@ -34,7 +34,7 @@ public class SmartBoyService extends AbstractService implements Parking {
     }
 
     private Long getSurplus(ManagerBoyLotRelation managerBoyLotRelation) {
-        ParkingLot parkingLot = parkingLotRepo.selectParkingLotById(managerBoyLotRelation.getLotId());
+        ParkingLot parkingLot = parkingLotRepo.selectById(managerBoyLotRelation.getLotId());
         Long count = lotCarRelationRepo.countByLotId(managerBoyLotRelation.getLotId());
         return parkingLot.getMaxCapacity()-count;
     }

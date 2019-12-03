@@ -1,10 +1,10 @@
 package com.aepb.parking.service.impl;
 
+import com.aepb.parking.exception.ParkingException;
+import com.aepb.parking.exception.TicketException;
 import com.aepb.parking.model.LotCarRelation;
 import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
-import com.aepb.parking.exception.ParkingException;
-import com.aepb.parking.exception.TicketException;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
 import com.aepb.parking.utils.SnowId;
@@ -19,11 +19,11 @@ public class ParkingLotService extends AbstractService implements Parking {
     }
 
     public String getOwnName(ParkingTicket parkingTicket) throws TicketException {
-        LotCarRelation lotCarRelation = lotCarRelationRepo.selectLotCarRelationById(parkingTicket.getLotCarRelationId());
+        LotCarRelation lotCarRelation = lotCarRelationRepo.selectById(parkingTicket.getLotCarRelationId());
         if (lotCarRelation == null) {
             throw new TicketException("获取信息失败");
         }
-        ParkingLot parkingLot = parkingLotRepo.selectParkingLotById(lotCarRelation.getLotId());
+        ParkingLot parkingLot = parkingLotRepo.selectById(lotCarRelation.getLotId());
         if (parkingLot == null) {
             throw new TicketException("获取信息失败");
         } else {
@@ -38,24 +38,24 @@ public class ParkingLotService extends AbstractService implements Parking {
         parkingTicket.setCreateTime(new Date());
         parkingTicket.setLotCarRelationId(lotCarRelation.getId());
         parkingTicket.setPick(false);
-        parkingTicketRepo.insertTicket(parkingTicket);
+        parkingTicketRepo.insert(parkingTicket);
         return parkingTicket;
     }
 
     public void unPark(Long lotId,Long parkingTicketId) throws TicketException, ParkingException {
         ParkingTicket parkingTicket = ticketService.getTicketById(parkingTicketId);
-        LotCarRelation lotCarRelation = lotCarRelationRepo.selectLotCarRelationById(parkingTicket.getLotCarRelationId());
+        LotCarRelation lotCarRelation = lotCarRelationRepo.selectById(parkingTicket.getLotCarRelationId());
         if(lotCarRelation==null){
             throw new ParkingException("没有票的信息");
         }
         if(!lotId.equals(lotCarRelation.getLotId())){
             throw new ParkingException("不是该停车场的票");
         }
-        if (parkingTicket.isPick()) {
+        if (parkingTicket.getPick()) {
             throw new ParkingException("已取过车票");
         }
         parkingTicket.setPick(true);
-        parkingTicketRepo.updateTicket(parkingTicket);
-        lotCarRelationRepo.deleteLotCarRelationById(parkingTicket.getLotCarRelationId());
+        parkingTicketRepo.update(parkingTicket);
+        lotCarRelationRepo.deleteById(parkingTicket.getLotCarRelationId());
     }
 }

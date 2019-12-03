@@ -1,10 +1,18 @@
 package com.aepb.parking.model;
 
-import com.aepb.parking.repo.Table;
+import com.aepb.parking.mapper.Table;
 import com.aepb.parking.utils.SnowId;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ParkingTicket implements Table {
     private Long id;
     private Long lotCarRelationId;
@@ -16,38 +24,5 @@ public class ParkingTicket implements Table {
         this.lotCarRelationId = lotCarRelationId;
         this.createTime = new Date();
         this.pick = false;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-
-    public Boolean isPick() {
-        return pick;
-    }
-
-    public void setPick(Boolean pick) {
-        this.pick = pick;
-    }
-
-    public Long getLotCarRelationId() {
-        return lotCarRelationId;
-    }
-
-    public void setLotCarRelationId(Long lotCarRelationId) {
-        this.lotCarRelationId = lotCarRelationId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

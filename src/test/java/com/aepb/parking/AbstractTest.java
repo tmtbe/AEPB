@@ -3,10 +3,10 @@ package com.aepb.parking;
 import com.aepb.parking.enums.ManagerBoyType;
 import com.aepb.parking.model.ManagerBoy;
 import com.aepb.parking.model.ParkingLot;
-import com.aepb.parking.repo.HashDb;
 import com.aepb.parking.service.impl.AbstractService;
 import com.aepb.parking.service.impl.ManagerBoyService;
 import com.aepb.parking.service.impl.ParkingLotService;
+import com.aepb.parking.utils.HashDb;
 import com.aepb.parking.utils.SnowId;
 import org.junit.Before;
 
@@ -28,7 +28,7 @@ public abstract class AbstractTest extends AbstractService {
         parkingLot.setName(name);
         parkingLot.setMaxCapacity(maxCapacity);
         parkingLot.setId(SnowId.Snow.nextId());
-        parkingLotRepo.insertParkingLot(parkingLot);
+        parkingLotRepo.insert(parkingLot);
         return parkingLot;
     }
 
@@ -37,7 +37,7 @@ public abstract class AbstractTest extends AbstractService {
         managerBoy.setId(SnowId.Snow.nextId());
         managerBoy.setName(name);
         managerBoy.setType(managerBoyType);
-        managerBoyRepo.insertManagerBoy(managerBoy);
+        managerBoyRepo.insert(managerBoy);
         return managerBoy;
     }
 }
