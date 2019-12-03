@@ -18,7 +18,7 @@ public class SmartBoyService extends AbstractService implements Parking {
 
     @Override
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
-        List<ParkingLotEntity> manageParkingLot = managerBoyRepo.getManageParkingLot(boyId);
+        List<ParkingLotEntity> manageParkingLot = managerBoyRepo.getManageParkingLotEntity(boyId);
         manageParkingLot.sort((A, B) -> {
             int result = getSurplus(B).compareTo(getSurplus(A));
             if (result == 0) result = A.getParkingLot().getId().compareTo(B.getParkingLot().getId());

@@ -47,7 +47,7 @@ public class ManagerBoyRepo extends AbstractRepo {
         managerBoyTicketRelationMapper.insert(managerBoyTicketRelation);
     }
 
-    public List<ParkingLotEntity> getManageParkingLot(Long boyId) {
+    public List<ParkingLotEntity> getManageParkingLotEntity(Long boyId) {
         return managerBoyLotRelationMapper.selectByBoyId(boyId)
                 .stream().map(n -> parkingLotRepo.getParkLotEntity(n.getLotId())).collect(toList());
 
