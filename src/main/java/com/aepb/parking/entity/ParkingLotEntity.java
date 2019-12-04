@@ -6,11 +6,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ParkingLotEntity {
+public class ParkingLotEntity implements ParkingLotProvider {
     private ParkingLot parkingLot;
     private Long capacity;
+
+    @Override
+    public List<ParkingLotEntity> getParkingLotEntities() {
+        return Collections.singletonList(this);
+    }
 }

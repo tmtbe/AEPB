@@ -1,7 +1,6 @@
 package com.aepb.parking.service.impl;
 
 import com.aepb.parking.entity.ManagerBoyEntity;
-import com.aepb.parking.entity.ParkingLotEntity;
 import com.aepb.parking.entity.TicketEntity;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
@@ -10,54 +9,38 @@ import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
+import com.aepb.parking.service.ParkingBoyStrategy;
+import com.aepb.parking.service.strategy.GraduateBoyStrategy;
+import com.aepb.parking.service.strategy.SmartBoyStrategy;
 
 import java.util.Arrays;
 
 public class ManagerBoyService extends AbstractService implements Parking {
-    private final ParkingLotService parkingLotService;
-
     public ManagerBoyService() {
         super();
-        parkingLotService = app.getComponent(ParkingLotService.class);
     }
 
-    protected ParkingTicket defaultPark(ManagerBoyEntity managerBoyEntity, Long boyId, Car car) throws ParkingException {
-        if (managerBoyEntity.getParkingLotEntities().isEmpty()) throw new ParkingException("Boy没有可用的停车场");
-        ParkingTicket ticket;
-        for (ParkingLotEntity parkingLotEntity : managerBoyEntity.getParkingLotEntities()) {
-            try {
-                ticket = parkingLotService.park(parkingLotEntity.getParkingLot().getId(), car);
-                managerBoyRepo.ticketBindManagerBoy(boyId, ticket);
-                return ticket;
-            } catch (ParkingException ignored) {
-            }
-        }
-        throw new ParkingException("没有空位");
-    }
-
-    private Parking getParking(Long boyId) throws ParkingException {
+    private ParkingBoyStrategy getParkingBoyStrategy(Long boyId) throws ParkingException {
         ManagerBoy managerBoy = managerBoyRepo.getManagerBoy(boyId);
         switch (managerBoy.getType()) {
             case GraduateBoy:
-                return app.getComponent(GraduateBoyService.class);
+                return app.getComponent(GraduateBoyStrategy.class);
             case SmartBoy:
-                return app.getComponent(SmartBoyService.class);
+                return app.getComponent(SmartBoyStrategy.class);
             default:
                 throw new ParkingException("不支持的类别");
         }
     }
 
-    @Override
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
-        return getParking(boyId).park(boyId, car);
+        ManagerBoyEntity manageBoyEntity = managerBoyRepo.getManageBoyEntity(boyId);
+        getParkingBoyStrategy(boyId).handle(manageBoyEntity);
+        ParkingTicket parkingTicket = park(manageBoyEntity, car);
+        managerBoyRepo.ticketBindManagerBoy(boyId, parkingTicket);
+        return parkingTicket;
     }
 
-    @Override
     public void unPark(Long boyId, Long parkingTicketId) throws ParkingException, TicketException {
-        getParking(boyId).unPark(boyId, parkingTicketId);
-    }
-
-    protected void defaultUnPark(Long boyId, Long parkingTicketId) throws TicketException, ParkingException {
         TicketEntity ticketEntity = ticketRepo.getTicketEntity(parkingTicketId);
         if (ticketEntity.getManagerBoy() == null) {
             throw new ParkingException("拒绝服务");
@@ -65,7 +48,7 @@ public class ManagerBoyService extends AbstractService implements Parking {
         if (!ticketEntity.getManagerBoy().getId().equals(boyId)) {
             throw new ParkingException("拒绝服务");
         }
-        parkingLotService.unPark(ticketEntity.getParkingLot().getId(), parkingTicketId);
+        unPark(parkingLotRepo.getParkLotEntity(ticketEntity.getParkingLot().getId()), ticketEntity);
     }
 
     public void bindParkLot(Long boyId, ParkingLot... parkingLots) {

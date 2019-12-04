@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ManagerBoyEntity {
+public class ManagerBoyEntity implements ParkingLotProvider {
     private ManagerBoy managerBoy;
     private List<ParkingLotEntity> parkingLotEntities;
 }
