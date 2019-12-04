@@ -1,6 +1,8 @@
 package com.aepb.parking.entity;
 
 import com.aepb.parking.model.ParkingLot;
+import com.aepb.parking.repo.ParkingLotRepo;
+import com.aepb.parking.utils.Application;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class ParkingLotEntity implements ParkingLotProvider {
 
     @Override
     public List<ParkingLotEntity> getParkingLotEntities() {
+        Application.app.getComponent(ParkingLotRepo.class).updateParkLotEntity(this);
         return Collections.singletonList(this);
     }
 }
