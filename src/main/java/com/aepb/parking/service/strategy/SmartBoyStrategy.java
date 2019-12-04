@@ -10,7 +10,7 @@ public class SmartBoyStrategy implements ParkingBoyStrategy {
     }
 
     @Override
-    public void handle(ParkingLotProvider parkingLotProvider) {
+    public void handleParkingLotProvider(ParkingLotProvider parkingLotProvider) {
         parkingLotProvider.getParkingLotEntities().sort((A, B) -> {
             int result = getSurplus(B).compareTo(getSurplus(A));
             if (result == 0) result = A.getParkingLot().getId().compareTo(B.getParkingLot().getId());

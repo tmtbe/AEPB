@@ -34,7 +34,7 @@ public class ManagerBoyService extends AbstractService implements Parking {
 
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
         ManagerBoyEntity manageBoyEntity = managerBoyRepo.getManageBoyEntity(boyId);
-        getParkingBoyStrategy(boyId).handle(manageBoyEntity);
+        getParkingBoyStrategy(boyId).handleParkingLotProvider(manageBoyEntity);
         ParkingTicket parkingTicket = park(manageBoyEntity, car);
         managerBoyRepo.ticketBindManagerBoy(boyId, parkingTicket);
         return parkingTicket;

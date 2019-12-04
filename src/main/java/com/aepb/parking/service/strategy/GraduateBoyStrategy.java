@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 public class GraduateBoyStrategy implements ParkingBoyStrategy {
     @Override
-    public void handle(ParkingLotProvider parkingLotProvider) {
+    public void handleParkingLotProvider(ParkingLotProvider parkingLotProvider) {
         parkingLotProvider.getParkingLotEntities().sort(Comparator.comparing(n -> n.getParkingLot().getId()));
     }
 }
