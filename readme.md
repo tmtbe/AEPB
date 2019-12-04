@@ -17,6 +17,10 @@
 
 9、GraduateBoy只帮忙取自己发放的Ticket的车
 
+10、SmartBoy 停在空位最多的
+
+11、SuperBoy 停在空置率最多的
+
 # Testing
 ## 停车获取凭证
 given：车
@@ -99,3 +103,8 @@ then：拒绝
 given：ticket
 when：通过ticket能定位停车场和管理员
 then：ok
+
+## SuperBoy
+given: 车，boy，停车场s
+when：A停车场的空置率大于B停车场
+then：停到A

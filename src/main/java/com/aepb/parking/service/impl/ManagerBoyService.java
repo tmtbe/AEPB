@@ -13,6 +13,7 @@ import com.aepb.parking.service.Parking;
 import com.aepb.parking.service.ParkingBoyStrategy;
 import com.aepb.parking.service.strategy.GraduateBoyStrategy;
 import com.aepb.parking.service.strategy.SmartBoyStrategy;
+import com.aepb.parking.service.strategy.SuperBoyStrategy;
 
 import java.util.Arrays;
 
@@ -28,6 +29,8 @@ public class ManagerBoyService extends AbstractService implements Parking {
                 return app.getComponent(GraduateBoyStrategy.class);
             case SmartBoy:
                 return app.getComponent(SmartBoyStrategy.class);
+            case SuperBoy:
+                return app.getComponent(SuperBoyStrategy.class);
             default:
                 throw new ParkingException("不支持的类别");
         }
