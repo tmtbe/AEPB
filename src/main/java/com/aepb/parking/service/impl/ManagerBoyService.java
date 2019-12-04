@@ -1,6 +1,7 @@
 package com.aepb.parking.service.impl;
 
 import com.aepb.parking.entity.ManagerBoyEntity;
+import com.aepb.parking.entity.ParkingLotEntity;
 import com.aepb.parking.entity.TicketEntity;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
@@ -34,8 +35,8 @@ public class ManagerBoyService extends AbstractService implements Parking {
 
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
         ManagerBoyEntity manageBoyEntity = managerBoyRepo.getManageBoyEntity(boyId);
-        getParkingBoyStrategy(boyId).handleParkingLotProvider(manageBoyEntity);
-        ParkingTicket parkingTicket = park(manageBoyEntity, car);
+        ParkingLotEntity parkingLotEntity = getParkingBoyStrategy(boyId).getParkingLotEntityFromProvider(manageBoyEntity);
+        ParkingTicket parkingTicket = park(parkingLotEntity, car);
         managerBoyRepo.ticketBindManagerBoy(boyId, parkingTicket);
         return parkingTicket;
     }
