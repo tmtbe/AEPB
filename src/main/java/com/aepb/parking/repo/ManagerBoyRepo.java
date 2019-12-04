@@ -1,6 +1,6 @@
 package com.aepb.parking.repo;
 
-import com.aepb.parking.entity.ParkingLotEntity;
+import com.aepb.parking.entity.ManagerBoyEntity;
 import com.aepb.parking.enums.ManagerBoyType;
 import com.aepb.parking.model.*;
 import com.aepb.parking.utils.SnowId;
@@ -47,9 +47,12 @@ public class ManagerBoyRepo extends AbstractRepo {
         managerBoyTicketRelationMapper.insert(managerBoyTicketRelation);
     }
 
-    public List<ParkingLotEntity> getManageParkingLotEntity(Long boyId) {
-        return managerBoyLotRelationMapper.selectByBoyId(boyId)
-                .stream().map(n -> parkingLotRepo.getParkLotEntity(n.getLotId())).collect(toList());
+    public ManagerBoyEntity getManageBoyEntity(Long boyId) {
+        return ManagerBoyEntity.builder()
+                .managerBoy(getManagerBoy(boyId))
+                .parkingLotEntities(managerBoyLotRelationMapper.selectByBoyId(boyId)
+                        .stream().map(n -> parkingLotRepo.getParkLotEntity(n.getLotId())).collect(toList()))
+                .build();
 
     }
 }

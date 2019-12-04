@@ -1,5 +1,6 @@
 package com.aepb.parking.service.impl;
 
+import com.aepb.parking.entity.ManagerBoyEntity;
 import com.aepb.parking.entity.ParkingLotEntity;
 import com.aepb.parking.entity.TicketEntity;
 import com.aepb.parking.exception.ParkingException;
@@ -11,7 +12,6 @@ import com.aepb.parking.service.Car;
 import com.aepb.parking.service.Parking;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class ManagerBoyService extends AbstractService implements Parking {
     private final ParkingLotService parkingLotService;
@@ -21,10 +21,10 @@ public class ManagerBoyService extends AbstractService implements Parking {
         parkingLotService = app.getComponent(ParkingLotService.class);
     }
 
-    protected ParkingTicket defaultPark(List<ParkingLotEntity> parkingLotEntityList, Long boyId, Car car) throws ParkingException {
-        if (parkingLotEntityList.isEmpty()) throw new ParkingException("Boy没有可用的停车场");
+    protected ParkingTicket defaultPark(ManagerBoyEntity managerBoyEntity, Long boyId, Car car) throws ParkingException {
+        if (managerBoyEntity.getParkingLotEntities().isEmpty()) throw new ParkingException("Boy没有可用的停车场");
         ParkingTicket ticket;
-        for (ParkingLotEntity parkingLotEntity : parkingLotEntityList) {
+        for (ParkingLotEntity parkingLotEntity : managerBoyEntity.getParkingLotEntities()) {
             try {
                 ticket = parkingLotService.park(parkingLotEntity.getParkingLot().getId(), car);
                 managerBoyRepo.ticketBindManagerBoy(boyId, ticket);
