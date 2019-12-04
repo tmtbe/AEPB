@@ -10,8 +10,8 @@ public class SmartBoyStrategy implements ParkingBoyStrategy {
 
     @Override
     public ParkingLotEntity getParkingLotEntityFromProvider(ParkingLotProvider parkingLotProvider) throws ParkingException {
-        return parkingLotProvider.getParkingLotEntities()
-                .stream().filter(n -> getSurplus(n) > 0)
+        return parkingLotProvider.getNotFullParkingLotEntities()
+                .stream()
                 .min((A, B) -> {
                     int result = getSurplus(B).compareTo(getSurplus(A));
                     if (result == 0) result = A.getParkingLot().getId().compareTo(B.getParkingLot().getId());
