@@ -12,9 +12,9 @@ import java.util.function.LongSupplier;
 @Builder
 public class ParkingLotEntity {
     private ParkingLot parkingLot;
-    private final LongSupplier LongSupplier;
+    private final LongSupplier capacitySupplier;
 
     public Long getCapacity() {
-        return LongSupplier.getAsLong();
+        return capacitySupplier.getAsLong();
     }
 }
