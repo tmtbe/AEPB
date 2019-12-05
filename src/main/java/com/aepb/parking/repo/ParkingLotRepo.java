@@ -13,7 +13,7 @@ public class ParkingLotRepo extends AbstractRepo {
         Long count = lotCarRelationMapper.countByLotId(lotId);
         return ParkingLotEntity.builder()
                 .parkingLot(parkingLot)
-                .LongSupplier(() -> lotCarRelationMapper.countByLotId(lotId))
+                .capacitySupplier(() -> lotCarRelationMapper.countByLotId(lotId))
                 .build();
     }
 

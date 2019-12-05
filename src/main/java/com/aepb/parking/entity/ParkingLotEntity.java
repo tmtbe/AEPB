@@ -11,7 +11,7 @@ import java.util.function.LongSupplier;
 @AllArgsConstructor
 @Builder
 public class ParkingLotEntity {
-    private ParkingLot parkingLot;
+    private final ParkingLot parkingLot;
     private final LongSupplier capacitySupplier;
 
     public Long getCapacity() {
