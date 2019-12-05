@@ -3,7 +3,7 @@ package com.aepb.parking.entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface ParkingLotProvider {
+public interface ParkingLotSupplier {
     List<ParkingLotEntity> getParkingLotEntities();
 
     default List<ParkingLotEntity> getNotFullParkingLotEntities() {

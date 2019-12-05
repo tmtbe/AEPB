@@ -1,7 +1,7 @@
 package com.aepb.parking.service.strategy;
 
 import com.aepb.parking.entity.ParkingLotEntity;
-import com.aepb.parking.entity.ParkingLotProvider;
+import com.aepb.parking.entity.ParkingLotSupplier;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.service.ParkingBoyStrategy;
 
@@ -9,8 +9,8 @@ public class SuperBoyStrategy implements ParkingBoyStrategy {
 
 
     @Override
-    public ParkingLotEntity getParkingLotEntityFromProvider(ParkingLotProvider parkingLotProvider) throws ParkingException {
-        return parkingLotProvider.getNotFullParkingLotEntities()
+    public ParkingLotEntity getParkingLotEntityFromProvider(ParkingLotSupplier parkingLotSupplier) throws ParkingException {
+        return parkingLotSupplier.getNotFullParkingLotEntities()
                 .stream()
                 .min((A, B) -> {
                     int result = getEmptyRate(B).compareTo(getEmptyRate(A));
