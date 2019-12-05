@@ -14,11 +14,11 @@ public abstract class AbstractRepo {
 
     public AbstractRepo() {
         this.app = Application.app;
-        this.parkingBoyLotRelationMapper = Application.app.getComponent(ParkingBoyLotRelationMapper.class);
-        this.parkingBoyTicketRelationMapper = Application.app.getComponent(ParkingBoyTicketRelationMapper.class);
-        this.lotCarRelationMapper = Application.app.getComponent(ParkingLotCarRelationMapper.class);
-        this.parkingTicketMapper = Application.app.getComponent(ParkingTicketMapper.class);
-        this.parkingLotMapper = Application.app.getComponent(ParkingLotMapper.class);
-        this.parkingBoyMapper = Application.app.getComponent(ParkingBoyMapper.class);
+        this.parkingBoyLotRelationMapper = app.getComponent(ParkingBoyLotRelationMapper.class);
+        this.parkingBoyTicketRelationMapper = app.getComponent(ParkingBoyTicketRelationMapper.class);
+        this.lotCarRelationMapper = app.getComponent(ParkingLotCarRelationMapper.class);
+        this.parkingTicketMapper = app.getComponent(ParkingTicketMapper.class);
+        this.parkingLotMapper = app.getComponent(ParkingLotMapper.class);
+        this.parkingBoyMapper = app.getComponent(ParkingBoyMapper.class);
     }
 }

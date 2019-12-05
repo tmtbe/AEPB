@@ -12,8 +12,8 @@ public abstract class AbstractService {
     protected final ParkingLotRepo parkingLotRepo;
     public AbstractService() {
         this.app = Application.app;
-        this.ticketRepo = Application.app.getComponent(TicketRepo.class);
-        this.parkingBoyRepo = Application.app.getComponent(ParkingBoyRepo.class);
-        this.parkingLotRepo = Application.app.getComponent(ParkingLotRepo.class);
+        this.ticketRepo = app.getComponent(TicketRepo.class);
+        this.parkingBoyRepo = app.getComponent(ParkingBoyRepo.class);
+        this.parkingLotRepo = app.getComponent(ParkingLotRepo.class);
     }
 }
