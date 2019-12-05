@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ManagerBoyLotRelation implements Table {
+public class ParkingBoyLotRelation implements Table {
     private Long id;
     private Long boyId;
     private Long lotId;

@@ -1,5 +1,5 @@
 package com.aepb.parking.enums;
 
-public enum  ManagerBoyType {
+public enum ParkingBoyType {
     GraduateBoy, SmartBoy, SuperBoy
 }

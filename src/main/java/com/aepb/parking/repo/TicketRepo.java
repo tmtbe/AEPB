@@ -26,19 +26,19 @@ public class TicketRepo extends AbstractRepo {
         if (parkingLot == null) {
             throw new SystemError("无法获取停车场信息");
         }
-        ManagerBoy managerBoy = null;
-        ManagerBoyTicketRelation managerBoyTicketRelation = managerBoyTicketRelationMapper.selectByTicketId(parkingTicket.getId());
-        if (managerBoyTicketRelation != null) {
-            Long boyId = managerBoyTicketRelation.getBoyId();
-            managerBoy = managerBoyMapper.selectById(boyId);
-            if (managerBoy == null) {
+        ParkingBoy parkingBoy = null;
+        ParkingBoyTicketRelation parkingBoyTicketRelation = parkingBoyTicketRelationMapper.selectByTicketId(parkingTicket.getId());
+        if (parkingBoyTicketRelation != null) {
+            Long boyId = parkingBoyTicketRelation.getBoyId();
+            parkingBoy = parkingBoyMapper.selectById(boyId);
+            if (parkingBoy == null) {
                 throw new SystemError("无法获取管理员信息");
             }
         }
         return TicketEntity.builder()
                 .ticket(parkingTicket)
                 .parkingLot(parkingLot)
-                .managerBoy(managerBoy)
+                .parkingBoy(parkingBoy)
                 .carId(lotCarRelation.getCarId())
                 .build();
     }

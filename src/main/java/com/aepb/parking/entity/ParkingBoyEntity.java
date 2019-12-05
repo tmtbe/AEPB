@@ -1,6 +1,6 @@
 package com.aepb.parking.entity;
 
-import com.aepb.parking.model.ManagerBoy;
+import com.aepb.parking.model.ParkingBoy;
 import com.aepb.parking.repo.ParkingLotRepo;
 import com.aepb.parking.utils.Application;
 import lombok.AllArgsConstructor;
@@ -14,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ManagerBoyEntity implements ParkingLotProvider {
-    private ManagerBoy managerBoy;
+public class ParkingBoyEntity implements ParkingLotProvider {
+    private ParkingBoy parkingBoy;
     private List<ParkingLotEntity> parkingLotEntities;
 
     public List<ParkingLotEntity> getParkingLotEntities() {

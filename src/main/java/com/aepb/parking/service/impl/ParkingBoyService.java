@@ -1,11 +1,11 @@
 package com.aepb.parking.service.impl;
 
-import com.aepb.parking.entity.ManagerBoyEntity;
+import com.aepb.parking.entity.ParkingBoyEntity;
 import com.aepb.parking.entity.ParkingLotEntity;
 import com.aepb.parking.entity.TicketEntity;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.model.ManagerBoy;
+import com.aepb.parking.model.ParkingBoy;
 import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import com.aepb.parking.service.Car;
@@ -17,14 +17,14 @@ import com.aepb.parking.service.strategy.SuperBoyStrategy;
 
 import java.util.Arrays;
 
-public class ManagerBoyService extends AbstractService implements Parking {
-    public ManagerBoyService() {
+public class ParkingBoyService extends AbstractService implements Parking {
+    public ParkingBoyService() {
         super();
     }
 
     private ParkingBoyStrategy getParkingBoyStrategy(Long boyId) throws ParkingException {
-        ManagerBoy managerBoy = managerBoyRepo.getManagerBoy(boyId);
-        switch (managerBoy.getType()) {
+        ParkingBoy parkingBoy = parkingBoyRepo.getParkingBoy(boyId);
+        switch (parkingBoy.getType()) {
             case GraduateBoy:
                 return app.getComponent(GraduateBoyStrategy.class);
             case SmartBoy:
@@ -37,25 +37,25 @@ public class ManagerBoyService extends AbstractService implements Parking {
     }
 
     public ParkingTicket park(Long boyId, Car car) throws ParkingException {
-        ManagerBoyEntity manageBoyEntity = managerBoyRepo.getManageBoyEntity(boyId);
+        ParkingBoyEntity manageBoyEntity = parkingBoyRepo.getManageBoyEntity(boyId);
         ParkingLotEntity parkingLotEntity = getParkingBoyStrategy(boyId).getParkingLotEntityFromProvider(manageBoyEntity);
         ParkingTicket parkingTicket = park(parkingLotEntity, car);
-        managerBoyRepo.ticketBindManagerBoy(boyId, parkingTicket);
+        parkingBoyRepo.ticketBindParkingBoy(boyId, parkingTicket);
         return parkingTicket;
     }
 
     public void unPark(Long boyId, Long parkingTicketId) throws ParkingException, TicketException {
         TicketEntity ticketEntity = ticketRepo.getTicketEntity(parkingTicketId);
-        if (ticketEntity.getManagerBoy() == null) {
+        if (ticketEntity.getParkingBoy() == null) {
             throw new ParkingException("拒绝服务");
         }
-        if (!ticketEntity.getManagerBoy().getId().equals(boyId)) {
+        if (!ticketEntity.getParkingBoy().getId().equals(boyId)) {
             throw new ParkingException("拒绝服务");
         }
         unPark(parkingLotRepo.getParkLotEntity(ticketEntity.getParkingLot().getId()), ticketEntity);
     }
 
     public void bindParkLot(Long boyId, ParkingLot... parkingLots) {
-        managerBoyRepo.bindParkLot(boyId, Arrays.asList(parkingLots));
+        parkingBoyRepo.bindParkLot(boyId, Arrays.asList(parkingLots));
     }
 }

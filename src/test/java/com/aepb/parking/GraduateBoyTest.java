@@ -1,9 +1,9 @@
 package com.aepb.parking;
 
-import com.aepb.parking.enums.ManagerBoyType;
+import com.aepb.parking.enums.ParkingBoyType;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.model.ManagerBoy;
+import com.aepb.parking.model.ParkingBoy;
 import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import org.junit.Before;
@@ -19,14 +19,14 @@ public class GraduateBoyTest extends AbstractTest{
     private TestCar testCarB;
     private TestCar testCarC;
     private TestCar testCarD;
-    private ManagerBoy graduateBoy;
+    private ParkingBoy graduateBoy;
 
     @Before
     public void setUp(){
         super.setUp();
         parkingLotA = parkingLotRepo.createParkingLot("parkA", 1L);
         parkingLotB = parkingLotRepo.createParkingLot("parkB", 2L);
-        graduateBoy = managerBoyRepo.createManagerBoy("boy", ManagerBoyType.GraduateBoy);
+        graduateBoy = parkingBoyRepo.createParkingBoy("boy", ParkingBoyType.GraduateBoy);
         managerBoyService.bindParkLot(graduateBoy.getId(),parkingLotA, parkingLotB);
 
         testCarA = new TestCar("粤A12133");
@@ -61,7 +61,7 @@ public class GraduateBoyTest extends AbstractTest{
     @Test
     public void should_get_ticket_info() throws ParkingException, TicketException {
         ParkingTicket ticket = managerBoyService.park(graduateBoy.getId(),testCarA);
-        assertEquals(graduateBoy.getName(), ticketRepo.getTicketEntity(ticket.getId()).getManagerBoy().getName());
+        assertEquals(graduateBoy.getName(), ticketRepo.getTicketEntity(ticket.getId()).getParkingBoy().getName());
         assertEquals(parkingLotA.getName(), ticketRepo.getTicketEntity(ticket.getId()).getParkingLot().getName());
     }
 

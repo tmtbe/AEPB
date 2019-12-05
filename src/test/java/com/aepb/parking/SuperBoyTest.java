@@ -1,9 +1,9 @@
 package com.aepb.parking;
 
-import com.aepb.parking.enums.ManagerBoyType;
+import com.aepb.parking.enums.ParkingBoyType;
 import com.aepb.parking.exception.ParkingException;
 import com.aepb.parking.exception.TicketException;
-import com.aepb.parking.model.ManagerBoy;
+import com.aepb.parking.model.ParkingBoy;
 import com.aepb.parking.model.ParkingLot;
 import com.aepb.parking.model.ParkingTicket;
 import org.junit.Before;
@@ -18,14 +18,14 @@ public class SuperBoyTest extends AbstractTest {
     private TestCar testCarB;
     private TestCar testCarC;
     private TestCar testCarD;
-    private ManagerBoy superBoy;
+    private ParkingBoy superBoy;
 
     @Before
     public void setUp() {
         super.setUp();
         parkingLotA = parkingLotRepo.createParkingLot("parkA", 2L);
         parkingLotB = parkingLotRepo.createParkingLot("parkB", 3L);
-        superBoy = managerBoyRepo.createManagerBoy("boy", ManagerBoyType.SuperBoy);
+        superBoy = parkingBoyRepo.createParkingBoy("boy", ParkingBoyType.SuperBoy);
         managerBoyService.bindParkLot(superBoy.getId(), parkingLotA, parkingLotB);
 
         testCarA = new TestCar("粤A12133");

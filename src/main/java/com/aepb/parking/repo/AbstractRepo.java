@@ -8,17 +8,17 @@ public abstract class AbstractRepo {
     protected final ParkingLotCarRelationMapper lotCarRelationMapper;
     protected final ParkingTicketMapper parkingTicketMapper;
     protected final ParkingLotMapper parkingLotMapper;
-    protected final ManagerBoyMapper managerBoyMapper;
-    protected final ManagerBoyLotRelationMapper managerBoyLotRelationMapper;
-    protected final ManagerBoyTicketRelationMapper managerBoyTicketRelationMapper;
+    protected final ParkingBoyMapper parkingBoyMapper;
+    protected final ParkingBoyLotRelationMapper parkingBoyLotRelationMapper;
+    protected final ParkingBoyTicketRelationMapper parkingBoyTicketRelationMapper;
 
     public AbstractRepo() {
         this.app = Application.app;
-        this.managerBoyLotRelationMapper = Application.app.getComponent(ManagerBoyLotRelationMapper.class);
-        this.managerBoyTicketRelationMapper = Application.app.getComponent(ManagerBoyTicketRelationMapper.class);
+        this.parkingBoyLotRelationMapper = Application.app.getComponent(ParkingBoyLotRelationMapper.class);
+        this.parkingBoyTicketRelationMapper = Application.app.getComponent(ParkingBoyTicketRelationMapper.class);
         this.lotCarRelationMapper = Application.app.getComponent(ParkingLotCarRelationMapper.class);
         this.parkingTicketMapper = Application.app.getComponent(ParkingTicketMapper.class);
         this.parkingLotMapper = Application.app.getComponent(ParkingLotMapper.class);
-        this.managerBoyMapper = Application.app.getComponent(ManagerBoyMapper.class);
+        this.parkingBoyMapper = Application.app.getComponent(ParkingBoyMapper.class);
     }
 }
