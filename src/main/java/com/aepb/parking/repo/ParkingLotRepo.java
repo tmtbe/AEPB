@@ -12,13 +12,9 @@ public class ParkingLotRepo extends AbstractRepo {
         if (parkingLot == null) throw new SystemError("找不到停车场");
         Long count = lotCarRelationMapper.countByLotId(lotId);
         return ParkingLotEntity.builder()
-                .capacity(count)
                 .parkingLot(parkingLot)
+                .LongSupplier(() -> lotCarRelationMapper.countByLotId(lotId))
                 .build();
-    }
-
-    public void updateParkLotCapacity(ParkingLotEntity parkingLotEntity) {
-        parkingLotEntity.setCapacity(lotCarRelationMapper.countByLotId(parkingLotEntity.getParkingLot().getId()));
     }
 
     public ParkingLot createParkingLot(String name, Long maxCapacity) {
