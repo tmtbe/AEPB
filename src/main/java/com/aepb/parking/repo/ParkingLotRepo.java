@@ -17,7 +17,7 @@ public class ParkingLotRepo extends AbstractRepo {
                 .build();
     }
 
-    public void updateParkLotEntity(ParkingLotEntity parkingLotEntity) {
+    public void updateParkLotCapacity(ParkingLotEntity parkingLotEntity) {
         parkingLotEntity.setCapacity(lotCarRelationMapper.countByLotId(parkingLotEntity.getParkingLot().getId()));
     }
 

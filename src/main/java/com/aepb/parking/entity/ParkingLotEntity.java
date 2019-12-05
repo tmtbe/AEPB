@@ -8,20 +8,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collections;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ParkingLotEntity implements ParkingLotProvider {
+public class ParkingLotEntity {
     private ParkingLot parkingLot;
     private Long capacity;
 
-    @Override
-    public List<ParkingLotEntity> getParkingLotEntities() {
-        Application.app.getComponent(ParkingLotRepo.class).updateParkLotEntity(this);
-        return Collections.singletonList(this);
+    public Long getCapacity() {
+        Application.app.getComponent(ParkingLotRepo.class).updateParkLotCapacity(this);
+        return capacity;
     }
 }
