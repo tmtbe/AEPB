@@ -10,7 +10,6 @@ public class ParkingLotRepo extends AbstractRepo {
     public ParkingLotEntity getParkLotEntity(Long lotId) {
         ParkingLot parkingLot = parkingLotMapper.selectById(lotId);
         if (parkingLot == null) throw new SystemError("找不到停车场");
-        Long count = lotCarRelationMapper.countByLotId(lotId);
         return ParkingLotEntity.builder()
                 .parkingLot(parkingLot)
                 .capacitySupplier(() -> lotCarRelationMapper.countByLotId(lotId))
