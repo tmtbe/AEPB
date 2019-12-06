@@ -108,3 +108,13 @@ then：ok
 given: 车，boy，停车场s
 when：A停车场的空置率大于B停车场
 then：停到A
+
+## Manager 使用boy
+given: boy，车
+when: 停车
+then：使用boy停车
+
+## Manager 使用lot
+given: lot，车
+when: 停车
+then：使用lot停车

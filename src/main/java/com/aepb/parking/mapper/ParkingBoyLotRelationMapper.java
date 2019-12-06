@@ -26,4 +26,10 @@ public class ParkingBoyLotRelationMapper {
     public List<ParkingBoyLotRelation> selectAll() {
         return DB.getTable(ParkingBoyLotRelation.class).list();
     }
+
+    public ParkingBoyLotRelation selectByLotId(long lotId) {
+        return DB.getTable(ParkingBoyLotRelation.class)
+                .where(ParkingBoyLotRelation::getLotId,lotId)
+                .one();
+    }
 }

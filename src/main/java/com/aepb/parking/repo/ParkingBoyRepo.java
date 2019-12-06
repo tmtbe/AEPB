@@ -47,12 +47,21 @@ public class ParkingBoyRepo extends AbstractRepo {
         parkingBoyTicketRelationMapper.insert(parkingBoyTicketRelation);
     }
 
-    public ParkingBoyEntity getManageBoyEntity(Long boyId) {
+    public ParkingBoyEntity getParkingBoyEntity(Long boyId) {
         return ParkingBoyEntity.builder()
                 .parkingBoy(getParkingBoy(boyId))
                 .parkingLotEntities(parkingBoyLotRelationMapper.selectByBoyId(boyId)
                         .stream().map(n -> parkingLotRepo.getParkLotEntity(n.getLotId())).collect(toList()))
                 .build();
 
+    }
+
+    public ParkingBoyEntity getParkingBoyFormLot(long lotId) {
+        ParkingBoyLotRelation parkingBoyLotRelation = parkingBoyLotRelationMapper.selectByLotId(lotId);
+        if (parkingBoyLotRelation != null) {
+            return getParkingBoyEntity(parkingBoyLotRelation.getBoyId());
+        } else {
+            return null;
+        }
     }
 }

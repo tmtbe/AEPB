@@ -2,6 +2,7 @@ package com.aepb.parking;
 
 import com.aepb.parking.repo.ParkingLotRepo;
 import com.aepb.parking.repo.TicketRepo;
+import com.aepb.parking.service.ParkingManagerService;
 import com.aepb.parking.service.impl.AbstractService;
 import com.aepb.parking.service.impl.ParkingBoyService;
 import com.aepb.parking.service.impl.ParkingLotService;
@@ -11,6 +12,7 @@ import org.junit.Before;
 public abstract class AbstractTest extends AbstractService {
     protected final ParkingLotService parkingLotService;
     protected final ParkingBoyService managerBoyService;
+    protected final ParkingManagerService parkingManagerService;
     protected final TicketRepo ticketRepo;
     protected final ParkingLotRepo parkingLotRepo;
 
@@ -20,6 +22,7 @@ public abstract class AbstractTest extends AbstractService {
         this.managerBoyService = this.app.getComponent(ParkingBoyService.class);
         this.ticketRepo = this.app.getComponent(TicketRepo.class);
         this.parkingLotRepo = this.app.getComponent(ParkingLotRepo.class);
+        this.parkingManagerService = this.app.getComponent(ParkingManagerService.class);
     }
 
     @Before
